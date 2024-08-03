@@ -32,6 +32,40 @@ namespace WinApp_postgresql_backup
 
             button_load.Click += Button_load_Click;
             button_save.Click += Button_save_Click;
+
+            button_pg_bin.Click += Button_pg_bin_Click;
+            button_dumpDir.Click += Button_dumpDir_Click;
+            button_restoreFile.Click += Button_restoreFile_Click;
+        }
+
+        private void Button_pg_bin_Click(object sender, EventArgs e)
+        {
+            string path = GetDirPath();
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                textBox_dbPath.Text = path;
+            }
+        }
+
+        private void Button_dumpDir_Click(object sender, EventArgs e)
+        {
+            string path = GetDirPath();
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                textBox_dumpPath.Text = path;
+            }
+        }
+
+        private void Button_restoreFile_Click(object sender, EventArgs e)
+        {
+            string path = GetFilePath();
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                textBox_restorePath.Text = path;
+            }
         }
 
         private void Button_save_Click(object sender, EventArgs e)
@@ -83,6 +117,55 @@ namespace WinApp_postgresql_backup
             textBox_dumpPath.Text = _setting.DumpPath;
             textBox_restorePath.Text = _setting.RestoreSourcePath;
 
+        }
+
+        /// <summary>
+        /// ディレクトリ選択ダイアログ
+        /// </summary>
+        /// <returns></returns>
+        private string GetDirPath()
+        {
+            string path = string.Empty;
+
+            using (FolderBrowserDialog dlg = new FolderBrowserDialog())
+            {
+                dlg.SelectedPath = @"c:\";
+                dlg.Description = "";
+                dlg.ShowNewFolderButton = false;
+
+                DialogResult result = dlg.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    path = dlg.SelectedPath;
+                }
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// ファイル選択ダイアログ
+        /// </summary>
+        /// <returns></returns>
+        private string GetFilePath()
+        {
+            string path = string.Empty;
+
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.InitialDirectory = @"c:\";
+                dlg.FilterIndex = 2;
+                dlg.Title = "";
+                dlg.RestoreDirectory = true;
+
+                DialogResult result = dlg.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    path = dlg.FileName;
+                }
+            }
+
+            return path;
         }
 
     }
