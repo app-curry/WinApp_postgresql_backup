@@ -28,7 +28,9 @@ namespace WinApp_postgresql_backup
         {
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            this.textBox_db_pass.PasswordChar = '*';
+            textBox_db_pass.PasswordChar = '*';
+
+            checkBox_showpass.CheckedChanged += CheckBox_showpass_CheckedChanged;
 
             button_load.Click += Button_load_Click;
             button_save.Click += Button_save_Click;
@@ -36,7 +38,50 @@ namespace WinApp_postgresql_backup
             button_pg_bin.Click += Button_pg_bin_Click;
             button_dumpDir.Click += Button_dumpDir_Click;
             button_restoreFile.Click += Button_restoreFile_Click;
+
+            textBox_dbPath.AllowDrop = true;
+            textBox_dbPath.DragDrop += TextBox_Path_DragDrop;
+            textBox_dbPath.DragEnter += TextBox_Path_DragEnter;
+
+            textBox_dumpPath.AllowDrop = true;
+            textBox_dumpPath.DragDrop += TextBox_Path_DragDrop;
+            textBox_dumpPath.DragEnter += TextBox_Path_DragEnter;
+
+            textBox_restorePath.AllowDrop = true;
+            textBox_restorePath.DragDrop += TextBox_Path_DragDrop;
+            textBox_restorePath.DragEnter += TextBox_Path_DragEnter;
+
+
         }
+
+        private void CheckBox_showpass_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_showpass.Checked)
+            {
+                textBox_db_pass.PasswordChar = '\0';
+            }
+            else
+            {
+                textBox_db_pass.PasswordChar = '*';
+            }
+        }
+
+        private void TextBox_Path_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void TextBox_Path_DragDrop(object sender, DragEventArgs e)
+        {
+            TextBox txtbox = (TextBox)sender;
+
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+            string[] path = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            txtbox.Text = path[0];
+
+        }
+
 
         private void Button_pg_bin_Click(object sender, EventArgs e)
         {
