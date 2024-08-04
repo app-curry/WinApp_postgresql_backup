@@ -83,6 +83,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utility\PostgresParam.cs" />
+    <Compile Include="utility\PostgreSQLCmdGen.cs" />
     <Compile Include="utility\Setting.cs" />
     <EmbeddedResource Include="Form_pgBackup.resx">
       <DependentUpon>Form_pgBackup.cs</DependentUpon>

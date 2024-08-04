@@ -51,6 +51,33 @@ namespace WinApp_postgresql_backup
             textBox_restorePath.DragDrop += TextBox_Path_DragDrop;
             textBox_restorePath.DragEnter += TextBox_Path_DragEnter;
 
+            button_passfile.Click += Button_passfile_Click;
+            button_open_passfile_folder.Click += Button_open_passfile_folder_Click;
+
+        }
+
+        private void Button_passfile_Click(object sender, EventArgs e)
+        {
+
+            PostgresParam param = new PostgresParam();
+
+            param.Host = textBox_db_host.Text;
+            param.Port = textBox_db_port.Text;
+            param.DatabaseName = textBox_db_name.Text;
+            param.User = textBox_db_user.Text;
+            param.Pass = textBox_db_pass.Text;
+
+            PostgreSQLCmdGen.CreatePassFile(param);
+
+        }
+
+        private void Button_open_passfile_folder_Click(object sender, EventArgs e)
+        {
+            string path = "";
+            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            path = Path.Combine(path, "postgresql");
+
+            System.Diagnostics.Process.Start(path);
 
         }
 
