@@ -54,6 +54,16 @@ namespace WinApp_postgresql_backup
             button_passfile.Click += Button_passfile_Click;
             button_open_passfile_folder.Click += Button_open_passfile_folder_Click;
 
+            button_pg_dump_cmd.Click += Button_pg_dump_cmd_Click;
+        }
+
+        private void Button_pg_dump_cmd_Click(object sender, EventArgs e)
+        {
+
+            Setting setting = GetSetting();
+
+            Dump_cmd(setting);
+
         }
 
         private void Button_passfile_Click(object sender, EventArgs e)
@@ -238,6 +248,87 @@ namespace WinApp_postgresql_backup
             }
 
             return path;
+        }
+
+        /// <summary>
+        /// 設定された各値を取得
+        /// </summary>
+        /// <returns></returns>
+        private Setting GetSetting()
+        {
+            Setting setting = new Setting();
+
+            setting.DBinstallPath = textBox_dbPath.Text;
+            setting.DumpPath = textBox_dumpPath.Text;
+            setting.RestoreSourcePath = textBox_restorePath.Text;
+
+            setting.PGParam = new PostgresParam();
+            setting.PGParam.DatabaseName = textBox_db_name.Text;
+            setting.PGParam.Port = textBox_db_port.Text;
+            setting.PGParam.Host = textBox_db_host.Text;
+            setting.PGParam.User = textBox_db_user.Text;
+            setting.PGParam.Pass = textBox_db_pass.Text;
+
+            return setting;
+        }
+
+        private string GetTimestampString()
+        {
+            string ts = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+
+            return ts;
+        }
+
+        /// <summary>
+        /// ダンプコマンドの生成
+        /// </summary>
+        private void Dump_cmd(Setting setting)
+        {
+            string ts = GetTimestampString();
+
+            string destdir = setting.DumpPath;
+
+            string cmdfilename = string.Format("{0}.pg_dump.bat", ts);
+            string cmdfilepath = Path.Combine(destdir, cmdfilename);
+
+            string dumpfilename = string.Format("{0}.pg_dump", ts);
+            string dumpfilepath = Path.Combine(destdir, dumpfilename);
+
+            string dbbin = setting.DBinstallPath;
+
+            string cd = String.Format("cd {0}", dbbin);
+
+            string dump =
+                String.Format("pg_dump -h {0} -p {1} -U {2} -d {3} -Fc -v -f {4}",
+                setting.PGParam.Host,
+                setting.PGParam.Port,
+                setting.PGParam.User,
+                setting.PGParam.DatabaseName,
+                dumpfilepath);
+
+            List<string> cmdlist = new List<string>();
+
+            cmdlist.Add(cd);
+            cmdlist.Add(dump);
+            cmdlist.Add("PAUSE");
+
+            string cmd = string.Join(Environment.NewLine, cmdlist);
+
+            execute_cmd(cmd, cmdfilepath);
+
+        }
+
+        private void execute_cmd(string cmd, string cmdfilepath)
+        {
+
+            using (StreamWriter sw = new StreamWriter(cmdfilepath))
+            {
+                sw.WriteLine(cmd);
+                sw.Close();
+            }
+
+            Process.Start(cmdfilepath);
+
         }
 
     }
