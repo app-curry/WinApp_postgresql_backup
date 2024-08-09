@@ -49,7 +49,7 @@ namespace WinApp_postgresql_backup.utility
         }
 
         /// <summary>
-        /// ダンプコマンドの生成
+        /// pg_dumpの実行
         /// </summary>
         public static void Dump_cmd(Setting setting)
         {
@@ -100,6 +100,10 @@ namespace WinApp_postgresql_backup.utility
 
         }
 
+        /// <summary>
+        /// pg_restoreの実行
+        /// </summary>
+        /// <param name="setting"></param>
         public static void Restore_cmd(Setting setting)
         {
             string restoredumpfilepath = setting.RestoreSourcePath;

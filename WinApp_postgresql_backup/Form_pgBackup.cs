@@ -87,8 +87,35 @@ namespace WinApp_postgresql_backup
             PostgreSQLCmdGen.Restore_cmd(setting);
         }
 
+        private static readonly Color c_textbox_error = Color.Pink;
+        private static Color c_textbox_backcolor = SystemColors.Window;
+
+        private void CheckTextBox(TextBox textBox, ref bool check)
+        {
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.BackColor = c_textbox_error;
+
+                check = false;
+            }
+            else
+            {
+                textBox.BackColor = c_textbox_backcolor;
+            }
+        }
+
         private void Button_passfile_Click(object sender, EventArgs e)
         {
+            bool check = true;
+
+            CheckTextBox(textBox_db_host, ref check);
+            CheckTextBox(textBox_db_port, ref check);
+            CheckTextBox(textBox_db_name, ref check);
+            CheckTextBox(textBox_db_user, ref check);
+            CheckTextBox(textBox_db_pass, ref check);
+
+            if (!check)
+                return;
 
             PostgresParam param = new PostgresParam();
 
@@ -100,6 +127,10 @@ namespace WinApp_postgresql_backup
 
             PostgreSQLCmdGen.CreatePassFile(param);
 
+            MessageBox.Show("パスワードファイルが生成されました。\r\n" +
+                "pgpass.conf\r\n" +
+                "右のボタンから確認できます。", "パスワードファイルの生成");
+            
         }
 
         private void Button_open_passfile_folder_Click(object sender, EventArgs e)
