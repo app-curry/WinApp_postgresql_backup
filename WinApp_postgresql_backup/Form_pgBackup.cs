@@ -73,6 +73,19 @@ namespace WinApp_postgresql_backup
 
         private void Button_pg_dump_cmd_Click(object sender, EventArgs e)
         {
+            bool check = true;
+
+            CheckTextBox(textBox_db_host, ref check);
+            CheckTextBox(textBox_db_port, ref check);
+            CheckTextBox(textBox_db_name, ref check);
+            CheckTextBox(textBox_db_user, ref check);
+            CheckTextBox(textBox_db_pass, ref check);
+
+            CheckDirTextBox(textBox_dbPath, ref check);
+            CheckDirTextBox(textBox_dumpPath, ref check);
+
+            if (!check)
+                return;
 
             Setting setting = GetSetting();
 
@@ -82,6 +95,20 @@ namespace WinApp_postgresql_backup
 
         private void Button_pg_restore_cmd_Click(object sender, EventArgs e)
         {
+            bool check = true;
+
+            CheckTextBox(textBox_db_host, ref check);
+            CheckTextBox(textBox_db_port, ref check);
+            CheckTextBox(textBox_db_name, ref check);
+            CheckTextBox(textBox_db_user, ref check);
+            CheckTextBox(textBox_db_pass, ref check);
+
+            CheckDirTextBox(textBox_dbPath, ref check);
+            CheckFileTextBox(textBox_restorePath, ref check);
+
+            if (!check)
+                return;
+
             Setting setting = GetSetting();
 
             PostgreSQLCmdGen.Restore_cmd(setting);
@@ -93,6 +120,38 @@ namespace WinApp_postgresql_backup
         private void CheckTextBox(TextBox textBox, ref bool check)
         {
             if (string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.BackColor = c_textbox_error;
+
+                check = false;
+            }
+            else
+            {
+                textBox.BackColor = c_textbox_backcolor;
+            }
+        }
+
+        private void CheckDirTextBox(TextBox textBox, ref bool check)
+        {
+            string dir= textBox.Text;
+
+            if (!Directory.Exists(dir))
+            {
+                textBox.BackColor = c_textbox_error;
+
+                check = false;
+            }
+            else
+            {
+                textBox.BackColor = c_textbox_backcolor;
+            }
+        }
+
+        private void CheckFileTextBox(TextBox textBox, ref bool check)
+        {
+            string file = textBox.Text;
+
+            if (!File.Exists(file))
             {
                 textBox.BackColor = c_textbox_error;
 
