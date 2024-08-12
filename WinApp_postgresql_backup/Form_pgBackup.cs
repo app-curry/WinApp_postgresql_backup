@@ -373,7 +373,7 @@ namespace WinApp_postgresql_backup
             setting.DumpPath = textBox_dumpPath.Text;
             setting.RestoreSourcePath = textBox_restorePath.Text;
 
-            setting.PGParam = new PostgresParam();
+            //setting.PGParam = new PostgresParam();
             setting.PGParam.DatabaseName = textBox_db_name.Text;
             setting.PGParam.Port = textBox_db_port.Text;
             setting.PGParam.Host = textBox_db_host.Text;
