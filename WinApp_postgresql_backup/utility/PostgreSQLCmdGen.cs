@@ -28,8 +28,9 @@ namespace WinApp_postgresql_backup.utility
 
             path = Path.Combine(path, "pgpass.conf");
 
-            string output = String.Format("{0}:{1}:{2}:{3}:{4}",
-                param.Host, param.Port, param.DatabaseName, param.User, param.Pass);
+            string output = $"{param.Host}:{param.Port}:{param.DatabaseName}:{param.User}:{param.Pass}";
+            //string output = String.Format("{0}:{1}:{2}:{3}:{4}",
+            //    param.Host, param.Port, param.DatabaseName, param.User, param.Pass);
 
             using (StreamWriter sw = new StreamWriter(path))
             {
@@ -57,23 +58,28 @@ namespace WinApp_postgresql_backup.utility
 
             string destdir = setting.DumpPath;
 
-            string cmdfilename = string.Format("{0}.pg_dump.bat", ts);
+            string cmdfilename = $"{ts}.pg_dump.bat";
+            //string cmdfilename = string.Format("{0}.pg_dump.bat", ts);
             string cmdfilepath = Path.Combine(destdir, cmdfilename);
 
-            string dumpfilename = string.Format("{0}.pg_dump", ts);
+            string dumpfilename = $"{ts}.pg_dump";
+            //string dumpfilename = string.Format("{0}.pg_dump", ts);
             string dumpfilepath = Path.Combine(destdir, dumpfilename);
 
             string dbbin = setting.DBinstallPath;
 
-            string cd = String.Format("cd {0}", dbbin);
+            string cd = $"cd {dbbin}";
+            //string cd = String.Format("cd {0}", dbbin);
 
             string dump =
-                String.Format("pg_dump -h {0} -p {1} -U {2} -d {3} -Fc -v -f {4}",
-                setting.PGParam.Host,
-                setting.PGParam.Port,
-                setting.PGParam.User,
-                setting.PGParam.DatabaseName,
-                dumpfilepath);
+       $"pg_dump -h {setting.PGParam.Host} -p {setting.PGParam.Port} -U {setting.PGParam.User} -d {setting.PGParam.DatabaseName} -Fc -v -f {dumpfilepath}";
+            //string dump =
+            //    String.Format("pg_dump -h {0} -p {1} -U {2} -d {3} -Fc -v -f {4}",
+            //    setting.PGParam.Host,
+            //    setting.PGParam.Port,
+            //    setting.PGParam.User,
+            //    setting.PGParam.DatabaseName,
+            //    dumpfilepath);
 
             List<string> cmdlist = new List<string>();
 
@@ -115,11 +121,14 @@ namespace WinApp_postgresql_backup.utility
             PostgresParam param = setting.PGParam;
 
             string dbbin = setting.DBinstallPath;
-            string cd = String.Format("cd {0}", dbbin);
+            string cd = $"cd {dbbin}";
+            //string cd = String.Format("cd {0}", dbbin);
 
             string restore =
-                String.Format("pg_restore --clean -h {0} -p {1} -U {2} -d {3} {4}",
-                param.Host, param.Port, param.User, param.DatabaseName, restoredumpfilepath);
+    $"pg_restore --clean -h {param.Host} -p {param.Port} -U {param.User} -d {param.DatabaseName} {restoredumpfilepath}";
+            //string restore =
+            //    String.Format("pg_restore --clean -h {0} -p {1} -U {2} -d {3} {4}",
+            //    param.Host, param.Port, param.User, param.DatabaseName, restoredumpfilepath);
 
             List<string> cmdlist = new List<string>();
 

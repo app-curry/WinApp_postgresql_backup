@@ -115,7 +115,7 @@ namespace WinApp_postgresql_backup
         }
 
         private static readonly Color c_textbox_error = Color.Pink;
-        private static Color c_textbox_backcolor = SystemColors.Window;
+        private static readonly Color c_textbox_backcolor = SystemColors.Window;
 
         private void CheckTextBox(TextBox textBox, ref bool check)
         {
@@ -347,7 +347,7 @@ namespace WinApp_postgresql_backup
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
                 dlg.InitialDirectory = @"c:\";
-                dlg.FilterIndex = 2;
+                //dlg.FilterIndex = 2;
                 dlg.Title = "";
                 dlg.RestoreDirectory = true;
 
